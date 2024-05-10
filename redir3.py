@@ -2,14 +2,23 @@
 import requests
 from requests_html import HTMLSession
 import re
+from urllib3.exceptions import InsecureRequestWarning #when using verify=false and to get rid of warning messages because insecure
 
-# test: https://www.redirect-checker.org/index.php
-url = 'https://tiny.one/1amzxt08' #redirect: 301
+# [ ] pass url as argument
+# [ ] handle requests error when SSL certificate check not passed (solution verify=False)
+# [ ] Option to list all redirections or only final target url
+#
+url = 'http://bonvoyagenewsletter.com/KVqU.i?NXJdHWJrXxggHk=xzqGVXLWRkJnxYMWdjbHdyNjAxb3N0bzAxbGhobjB6MXQyMXAwYWxjN3p2ajA4dw=='
+# url = 'http://bonvoyagenewsletter.com/GkgD.a?CbxmkdQQxGpnXS=bCTLSWwLwFmmbbMWdjbHdyNjAxb3NjNzAxbGhobjB6MXQyMXAwYWxjN3p4aWxjZA==' #redirect: 301
 # url = 'https://find-mainstream-zone.life/?u=6c98hwq&o=u6wkrbr&m=1&t=maiendednew' #'http://www.organicfarmsamritsar.com/c/?&MJy3s2BwTomGMV100m4qCzlagg=de'
 
 headers = {'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'}
 
 session = HTMLSession()
+
+# Suppress the warnings from urllib3 when usin verify=false
+requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
+
 
 # async def execWebpage(r):
 	# print("async funct in progress...")
@@ -22,7 +31,7 @@ def check_redirect(url):
 	while(noMoreRedirect == False):
 		print("> Request HTML from", url)
 		# r = requests.get(url, headers = headers, allow_requests = False)
-		r = session.get(url, headers = headers)
+		r = session.get(url, headers = headers, verify = False) # add verify=False to bypass SSL certificate check
 		# print(r.html.render())
 		# s = r.text
 		s = r.html
